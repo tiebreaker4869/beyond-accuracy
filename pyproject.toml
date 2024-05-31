@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "beyond-accuracy"
+version = "0.1.0"
+description = "A toolkit for evaluating recommendation systems with metrics that go beyond accuracy."
+authors = ["Lifan Sun <lifansun1412@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.10.0"
+pytest = "^8.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
