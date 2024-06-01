@@ -55,5 +55,5 @@ class Serendipity(BaseMetric):
         return serendipity / k
 
     def __compute_popularity_based_prob(self, item: int, alpha: int = 1) -> float:
-        normaliser = sum(self._popularity.values()) + alpha * len(self._popularity)
+        normaliser = sum(self._popularity.values()) + alpha * len(self._all_items)
         return (self._popularity[item] + alpha) / normaliser
