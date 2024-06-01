@@ -17,6 +17,9 @@ class Precision(BaseMetric):
     Precision metric.
     """
 
+    def __init__(self, all_items: List[int | str]) -> None:
+        super().__init__(all_items)
+
     def __compute_metric(
         self,
         recommendations: List[int],
@@ -45,6 +48,9 @@ class Recall(BaseMetric):
     """
     Recall metric.
     """
+
+    def __init__(self, all_items: List[int | str]) -> None:
+        super().__init__(all_items)
 
     def __compute_metric(
         self,
@@ -77,6 +83,9 @@ class MRR(BaseMetric):
     Mean Reciprocal Rank metric.
     """
 
+    def __init__(self, all_items: List[int | str]) -> None:
+        super().__init__(all_items)
+
     def __compute_metric(
         self,
         recommendations: List[int],
@@ -105,6 +114,9 @@ class NDCG(BaseMetric):
     """
     Normalized Discounted Cumulative Gain metric.
     """
+
+    def __init__(self, all_items: List[int | str]) -> None:
+        super().__init__(all_items)
 
     def __compute_metric(
         self,

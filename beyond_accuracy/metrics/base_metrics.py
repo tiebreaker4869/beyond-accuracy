@@ -14,6 +14,9 @@ class BaseMetric(ABC):
     Abstract base class for metrics to be used in recommendation systems.
     """
 
+    def __init__(self, all_items: List[int | str]) -> None:
+        self._all_items = all_items
+
     def compute(
         self,
         recommendations: List[str | int],
@@ -53,14 +56,13 @@ class BaseMetric(ABC):
         Returns:
             Tuple[List[int], List[int]]: The mapped lists.
         """
-        all_items: List[str | int] = list(set(recommendations + interaction_historys))
-        all_items.sort()
+        self._all_items.sort()
         # map items to an unique index
         transformed_recommendations = [
-            all_items.index(item) for item in recommendations
+            self._all_items.index(item) for item in recommendations
         ]
         transformed_interaction_historys = [
-            all_items.index(item) for item in interaction_historys
+            self._all_items.index(item) for item in interaction_historys
         ]
 
         return transformed_recommendations, transformed_interaction_historys
