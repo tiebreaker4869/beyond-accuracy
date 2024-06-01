@@ -58,3 +58,59 @@ class Serendipity(BaseMetric):
         # a popularity-based probability for a item, with laplace smoothing
         normaliser = sum(self._popularity.values()) + alpha * len(self._all_items)
         return (self._popularity[item] + alpha) / normaliser
+
+
+class OrderAwareSerendipity(BaseMetric):
+    """
+    Order-aware serendipity metric.
+    """
+
+    def __init__(self, all_items: List[int | str]) -> None:
+        super().__init__(all_items)
+        self._popularity: Dict[int, int] = {}
+
+    def fit(self, all_interactions: List[str | int]) -> None:
+        _, transformed_interactions = self._input_mapping([], all_interactions)
+        for item in transformed_interactions:
+            if item in self._popularity:
+                self._popularity[item] += 1
+            else:
+                self._popularity[item] = 1
+
+    def _compute_metric(
+        self,
+        recommendations: List[int],
+        interaction_historys: List[int],
+        scores: List[float],
+        k: int,
+    ) -> float:
+        """
+        Compute the order-aware serendipity metric.
+
+        Args:
+            recommendations: List of recommended items.
+            interaction_historys: List of items interacted with by the user.
+            scores: List of scores for the recommended items.
+            k: Number of recommendations to consider.
+
+        Returns:
+            float: The computed order-aware serendipity.
+        """
+        serendipity = 0.0
+        relevant_items_running_count = 0
+        for i, item in enumerate(recommendations[:k]):
+            if item in interaction_historys:
+                relevant_items_running_count += 1
+                # add a order-aware factor
+                serendipity += (
+                    max((scores[i] - self.__compute_popularity_based_prob(item)), 0)
+                    * relevant_items_running_count
+                    / (i + 1)
+                )
+
+        return serendipity / k
+
+    def __compute_popularity_based_prob(self, item: int, alpha: int = 1) -> float:
+        # a popularity-based probability for a item, with laplace smoothing
+        normaliser = sum(self._popularity.values()) + alpha * len(self._all_items)
+        return (self._popularity[item] + alpha) / normaliser
