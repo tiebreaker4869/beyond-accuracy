@@ -39,7 +39,7 @@ class BaseMetric(ABC):
         transformed_recommendations, transformed_interaction_historys = (
             self.__input_mapping(recommendations, interaction_historys)
         )
-        return self.__compute_metric(
+        return self._compute_metric(
             transformed_recommendations, transformed_interaction_historys, scores, k
         )
 
@@ -68,7 +68,7 @@ class BaseMetric(ABC):
         return transformed_recommendations, transformed_interaction_historys
 
     @abstractmethod
-    def __compute_metric(
+    def _compute_metric(
         self,
         recommendations: List[int],
         interaction_historys: List[int],

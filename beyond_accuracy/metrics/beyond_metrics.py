@@ -26,7 +26,7 @@ class Serendipity(BaseMetric):
             else:
                 self._popularity[item] = 1
 
-    def __compute_metric(
+    def _compute_metric(
         self,
         recommendations: List[int],
         interaction_historys: List[int],

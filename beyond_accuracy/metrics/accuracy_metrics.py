@@ -20,7 +20,7 @@ class Precision(BaseMetric):
     def __init__(self, all_items: List[int | str]) -> None:
         super().__init__(all_items)
 
-    def __compute_metric(
+    def _compute_metric(
         self,
         recommendations: List[int],
         interaction_historys: List[int],
@@ -52,7 +52,7 @@ class Recall(BaseMetric):
     def __init__(self, all_items: List[int | str]) -> None:
         super().__init__(all_items)
 
-    def __compute_metric(
+    def _compute_metric(
         self,
         recommendations: List[int],
         interaction_historys: List[int],
@@ -86,7 +86,7 @@ class MRR(BaseMetric):
     def __init__(self, all_items: List[int | str]) -> None:
         super().__init__(all_items)
 
-    def __compute_metric(
+    def _compute_metric(
         self,
         recommendations: List[int],
         interaction_historys: List[int],
@@ -118,7 +118,7 @@ class NDCG(BaseMetric):
     def __init__(self, all_items: List[int | str]) -> None:
         super().__init__(all_items)
 
-    def __compute_metric(
+    def _compute_metric(
         self,
         recommendations: List[int],
         interaction_historys: List[int],
