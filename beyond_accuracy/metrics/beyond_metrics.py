@@ -19,7 +19,7 @@ class Serendipity(BaseMetric):
         self._popularity: Dict[int, int] = {}
 
     def fit(self, all_interactions: List[str | int]) -> None:
-        _, transformed_interactions = self.__input_mapping([], all_interactions)
+        _, transformed_interactions = self._input_mapping([], all_interactions)
         for item in transformed_interactions:
             if item in self._popularity:
                 self._popularity[item] += 1

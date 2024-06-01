@@ -37,13 +37,13 @@ class BaseMetric(ABC):
             float: The computed metric.
         """
         transformed_recommendations, transformed_interaction_historys = (
-            self.__input_mapping(recommendations, interaction_historys)
+            self._input_mapping(recommendations, interaction_historys)
         )
         return self._compute_metric(
             transformed_recommendations, transformed_interaction_historys, scores, k
         )
 
-    def __input_mapping(
+    def _input_mapping(
         self, recommendations: List[str | int], interaction_historys: List[str | int]
     ) -> Tuple[List[int], List[int]]:
         """
