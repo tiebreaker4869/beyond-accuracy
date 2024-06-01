@@ -18,7 +18,11 @@ class Precision(BaseMetric):
     """
 
     def __compute_metric(
-        self, recommendations: List[int], interaction_historys: List[int], k: int
+        self,
+        recommendations: List[int],
+        interaction_historys: List[int],
+        scores: List[float],
+        k: int,
     ) -> float:
         """
         Compute the precision metric.
@@ -43,7 +47,11 @@ class Recall(BaseMetric):
     """
 
     def __compute_metric(
-        self, recommendations: List[int], interaction_historys: List[int], k: int
+        self,
+        recommendations: List[int],
+        interaction_historys: List[int],
+        scores: List[float],
+        k: int,
     ) -> float:
         """
         Compute the recall metric.
@@ -70,7 +78,11 @@ class MRR(BaseMetric):
     """
 
     def __compute_metric(
-        self, recommendations: List[int], interaction_historys: List[int], k: int
+        self,
+        recommendations: List[int],
+        interaction_historys: List[int],
+        scores: List[float],
+        k: int,
     ) -> float:
         """
         Compute the Mean Reciprocal Rank metric.
@@ -95,7 +107,11 @@ class NDCG(BaseMetric):
     """
 
     def __compute_metric(
-        self, recommendations: List[int], interaction_historys: List[int], k: int
+        self,
+        recommendations: List[int],
+        interaction_historys: List[int],
+        scores: List[float],
+        k: int,
     ) -> float:
         """
         Compute the Normalized Discounted Cumulative Gain metric.
