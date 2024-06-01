@@ -31,10 +31,12 @@ class BaseMetric(ABC):
         Returns:
             float: The computed metric.
         """
-        recommendations, interaction_historys = self.__input_mapping(
-            recommendations, interaction_historys
+        transformed_recommendations, transformed_interaction_historys = (
+            self.__input_mapping(recommendations, interaction_historys)
         )
-        return self.__compute_metric(recommendations, interaction_historys, k)
+        return self.__compute_metric(
+            transformed_recommendations, transformed_interaction_historys, k
+        )
 
     def __input_mapping(
         self, recommendations: List[str | int], interaction_historys: List[str | int]
@@ -49,9 +51,8 @@ class BaseMetric(ABC):
         Returns:
             Tuple[List[int], List[int]]: The mapped lists.
         """
-        all_items: List[str | int] = list(
-            set(recommendations + interaction_historys)
-        ).sort()
+        all_items: List[str | int] = list(set(recommendations + interaction_historys))
+        all_items.sort()
         # map items to an unique index
         transformed_recommendations = [
             all_items.index(item) for item in recommendations
