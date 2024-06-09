@@ -24,7 +24,6 @@ class Precision(BaseMetric):
         self,
         recommendations: List[int],
         interaction_historys: List[int],
-        scores: List[float],
         k: int,
     ) -> float:
         """
@@ -56,7 +55,6 @@ class Recall(BaseMetric):
         self,
         recommendations: List[int],
         interaction_historys: List[int],
-        scores: List[float],
         k: int,
     ) -> float:
         """
@@ -90,7 +88,6 @@ class MRR(BaseMetric):
         self,
         recommendations: List[int],
         interaction_historys: List[int],
-        scores: List[float],
         k: int,
     ) -> float:
         """
@@ -122,7 +119,6 @@ class NDCG(BaseMetric):
         self,
         recommendations: List[int],
         interaction_historys: List[int],
-        scores: List[float],
         k: int,
     ) -> float:
         """

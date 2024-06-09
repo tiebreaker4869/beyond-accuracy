@@ -21,7 +21,6 @@ class BaseMetric(ABC):
         self,
         recommendations: List[str | int],
         interaction_historys: List[str | int],
-        scores: List[float],
         k: int,
     ) -> float:
         """
@@ -30,7 +29,6 @@ class BaseMetric(ABC):
         Args:
             recommendations: List of recommended items.
             interaction_historys: List of items interacted with by the user.
-            scores: List of scores for the recommended items.
             k: Number of recommendations to consider.
 
         Returns:
@@ -40,7 +38,7 @@ class BaseMetric(ABC):
             self._input_mapping(recommendations, interaction_historys)
         )
         return self._compute_metric(
-            transformed_recommendations, transformed_interaction_historys, scores, k
+            transformed_recommendations, transformed_interaction_historys, k
         )
 
     def _input_mapping(

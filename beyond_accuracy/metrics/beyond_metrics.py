@@ -8,6 +8,8 @@ from .base_metrics import BaseMetric
 
 from typing import List, Dict
 
+import heapq
+
 
 class Serendipity(BaseMetric):
     """
@@ -30,7 +32,6 @@ class Serendipity(BaseMetric):
         self,
         recommendations: List[int],
         interaction_historys: List[int],
-        scores: List[float],
         k: int,
     ) -> float:
         """
@@ -48,16 +49,22 @@ class Serendipity(BaseMetric):
         serendipity = 0.0
         for i, item in enumerate(recommendations[:k]):
             if item in interaction_historys:
+                score = (k - i - 1) / (k - 1)
+                primitive_score =  self.__compute_popularity_based_prob(item, k)
                 serendipity += max(
-                    (scores[i] - self.__compute_popularity_based_prob(item)), 0
+                    (score - primitive_score), 0
                 )
 
         return serendipity / k
 
-    def __compute_popularity_based_prob(self, item: int, alpha: int = 1) -> float:
-        # a popularity-based probability for a item, with laplace smoothing
-        normaliser = sum(self._popularity.values()) + alpha * len(self._all_items)
-        return (self._popularity[item] + alpha) / normaliser
+    def __compute_popularity_based_prob(self, item: int, list_len: int) -> float:
+        most_popular_items_pop = heapq.nlargest(list_len, self._popularity.items(), key=lambda x: x[1])
+        most_popular_items = [item[0] for item in most_popular_items_pop]
+        if item not in most_popular_items:
+            return 0
+        # find the index of item in the most popular items
+        rank = most_popular_items.index(item) + 1
+        return (list_len - rank) / (list_len - 1)
 
 
 class OrderAwareSerendipity(BaseMetric):
@@ -81,7 +88,6 @@ class OrderAwareSerendipity(BaseMetric):
         self,
         recommendations: List[int],
         interaction_historys: List[int],
-        scores: List[float],
         k: int,
     ) -> float:
         """
@@ -102,15 +108,20 @@ class OrderAwareSerendipity(BaseMetric):
             if item in interaction_historys:
                 relevant_items_running_count += 1
                 # add a order-aware factor
+                score = (k - i - 1) / (k - 1)
                 serendipity += (
-                    max((scores[i] - self.__compute_popularity_based_prob(item)), 0)
+                    max((score - self.__compute_popularity_based_prob(item, k)), 0)
                     * relevant_items_running_count
                     / (i + 1)
                 )
 
         return serendipity / k
 
-    def __compute_popularity_based_prob(self, item: int, alpha: int = 1) -> float:
-        # a popularity-based probability for a item, with laplace smoothing
-        normaliser = sum(self._popularity.values()) + alpha * len(self._all_items)
-        return (self._popularity[item] + alpha) / normaliser
+    def __compute_popularity_based_prob(self, item: int, list_len: int) -> float:
+        most_popular_items_pop = heapq.nlargest(list_len, self._popularity.items(), key=lambda x: x[1])
+        most_popular_items = [item[0] for item in most_popular_items_pop]
+        if item not in most_popular_items:
+            return 0
+        # find the index of item in the most popular items
+        rank = most_popular_items.index(item) + 1
+        return (list_len - rank) / (list_len - 1)
