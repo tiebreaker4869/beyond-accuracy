@@ -4,6 +4,7 @@ import math
 from beyond_accuracy.metrics.beyond_metrics import Serendipity, OrderAwareSerendipity
 import random
 
+
 @pytest.fixture
 def sample_data():
 
@@ -23,9 +24,7 @@ def sample_data():
 
 
 def test_serendipity(sample_data):
-    all_items, all_interactions, recommendations, interaction_history, k = (
-        sample_data
-    )
+    all_items, all_interactions, recommendations, interaction_history, k = sample_data
     serendipity_metric = Serendipity(all_items)
     serendipity_metric.fit(all_interactions)
     serendipity_value = serendipity_metric.compute(
@@ -35,9 +34,7 @@ def test_serendipity(sample_data):
 
 
 def test_serendipity_r(sample_data):
-    all_items, all_interactions, recommendations, interaction_history, k = (
-        sample_data
-    )
+    all_items, all_interactions, recommendations, interaction_history, k = sample_data
     serendipity_metric = OrderAwareSerendipity(all_items)
     serendipity_metric.fit(all_interactions)
     serendipity_value = serendipity_metric.compute(

@@ -27,9 +27,7 @@ def test_precision(sample_data):
     """
     recommended_list, relevant_list, k, all_items = sample_data
     precision = Precision(all_items)
-    assert math.isclose(
-        precision.compute(recommended_list, relevant_list, k), 2 / 3
-    )
+    assert math.isclose(precision.compute(recommended_list, relevant_list, k), 2 / 3)
 
 
 def test_recall(sample_data):
@@ -66,6 +64,4 @@ def test_ndcg(sample_data):
     recommended_list, relevant_list, k, all_items = sample_data
     ndcg = NDCG(all_items)
     golden_answer = (1 / 1 + 1 / 2) / (1 + 1 / math.log2(3) + 1 / 2)
-    assert math.isclose(
-        ndcg.compute(recommended_list, relevant_list, k), golden_answer
-    )
+    assert math.isclose(ndcg.compute(recommended_list, relevant_list, k), golden_answer)

@@ -50,15 +50,15 @@ class Serendipity(BaseMetric):
         for i, item in enumerate(recommendations[:k]):
             if item in interaction_historys:
                 score = (k - i - 1) / (k - 1)
-                primitive_score =  self.__compute_popularity_based_prob(item, k)
-                serendipity += max(
-                    (score - primitive_score), 0
-                )
+                primitive_score = self.__compute_popularity_based_prob(item, k)
+                serendipity += max((score - primitive_score), 0)
 
         return serendipity / k
 
     def __compute_popularity_based_prob(self, item: int, list_len: int) -> float:
-        most_popular_items_pop = heapq.nlargest(list_len, self._popularity.items(), key=lambda x: x[1])
+        most_popular_items_pop = heapq.nlargest(
+            list_len, self._popularity.items(), key=lambda x: x[1]
+        )
         most_popular_items = [item[0] for item in most_popular_items_pop]
         if item not in most_popular_items:
             return 0
@@ -118,7 +118,9 @@ class OrderAwareSerendipity(BaseMetric):
         return serendipity / k
 
     def __compute_popularity_based_prob(self, item: int, list_len: int) -> float:
-        most_popular_items_pop = heapq.nlargest(list_len, self._popularity.items(), key=lambda x: x[1])
+        most_popular_items_pop = heapq.nlargest(
+            list_len, self._popularity.items(), key=lambda x: x[1]
+        )
         most_popular_items = [item[0] for item in most_popular_items_pop]
         if item not in most_popular_items:
             return 0
