@@ -19,6 +19,7 @@ class Serendipity(BaseMetric):
     def __init__(self, all_items: List[int | str]) -> None:
         super().__init__(all_items)
         self._popularity: Dict[int, int] = {}
+        self._itemwise_metrics: Dict[int, float] = None
 
     def fit(self, all_interactions: List[str | int]) -> None:
         _, transformed_interactions = self._input_mapping([], all_interactions)
@@ -46,13 +47,14 @@ class Serendipity(BaseMetric):
         Returns:
             float: The computed serendipity.
         """
+        self._itemwise_metrics = {}
         serendipity = 0.0
         for i, item in enumerate(recommendations[:k]):
             if item in interaction_historys:
                 score = (k - i - 1) / (k - 1)
                 primitive_score = self.__compute_popularity_based_prob(item, k)
                 serendipity += max((score - primitive_score), 0)
-
+                self._itemwise_metrics[item] = max((score - primitive_score), 0)
         return serendipity / k
 
     def __compute_popularity_based_prob(self, item: int, list_len: int) -> float:
@@ -65,6 +67,15 @@ class Serendipity(BaseMetric):
         # find the index of item in the most popular items
         rank = most_popular_items.index(item) + 1
         return (list_len - rank) / (list_len - 1)
+
+    def get_itemwise_metrics(self) -> Dict[int, float]:
+        """
+        Get the item-wise serendipity metrics.
+
+        Returns:
+            Dict[int, float]: The item-wise serendipity metrics.
+        """
+        return self._itemwise_metrics
 
 
 class OrderAwareSerendipity(BaseMetric):

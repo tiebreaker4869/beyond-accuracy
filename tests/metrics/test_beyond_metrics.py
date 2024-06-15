@@ -30,6 +30,7 @@ def test_serendipity(sample_data):
     serendipity_value = serendipity_metric.compute(
         recommendations, interaction_history, k
     )
+    print(serendipity_metric.get_itemwise_metrics())
     print(serendipity_value)
 
 
