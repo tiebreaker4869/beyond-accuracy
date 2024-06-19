@@ -58,6 +58,8 @@ class Serendipity(BaseMetric):
                 primitive_score = self.__compute_popularity_based_prob(item, k)
                 serendipity += max((score - primitive_score), 0)
                 self._itemwise_metrics[item] = max((score - primitive_score), 0)
+            else:
+                self._itemwise_metrics[item] = 0 
         return serendipity / k
 
     def __compute_popularity_based_prob(self, item: int, list_len: int) -> float:
@@ -131,6 +133,8 @@ class OrderAwareSerendipity(BaseMetric):
                     * relevant_items_running_count
                     / (i + 1)
                 )
+            else:
+                serendipity += 0
 
         return serendipity / k
 
