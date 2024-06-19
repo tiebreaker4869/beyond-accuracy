@@ -49,6 +49,9 @@ class Serendipity(BaseMetric):
         """
         self._itemwise_metrics = {}
         serendipity = 0.0
+        # padding with 0 if recommendation list is shorter than k
+        if len(recommendations) < k:
+            recommendations += [0] * (k - len(recommendations))
         for i, item in enumerate(recommendations[:k]):
             if item in interaction_historys:
                 score = (k - i - 1) / (k - 1)
@@ -115,6 +118,9 @@ class OrderAwareSerendipity(BaseMetric):
         """
         serendipity = 0.0
         relevant_items_running_count = 0
+        # padding with 0 if recommendation list is shorter than k
+        if len(recommendations) < k:
+            recommendations += [0] * (k - len(recommendations))
         for i, item in enumerate(recommendations[:k]):
             if item in interaction_historys:
                 relevant_items_running_count += 1
