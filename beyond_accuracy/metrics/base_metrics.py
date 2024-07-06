@@ -54,16 +54,8 @@ class BaseMetric(ABC):
         Returns:
             Tuple[List[int], List[int]]: The mapped lists.
         """
-        self._all_items.sort()
-        # map items to an unique index
-        transformed_recommendations = [
-            self._all_items.index(item) for item in recommendations
-        ]
-        transformed_interaction_historys = [
-            self._all_items.index(item) for item in interaction_historys
-        ]
 
-        return transformed_recommendations, transformed_interaction_historys
+        return recommendations, interaction_historys
 
     @abstractmethod
     def _compute_metric(
