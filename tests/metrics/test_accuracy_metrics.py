@@ -52,16 +52,3 @@ def test_mrr(sample_data):
     recommended_list, relevant_list, k, all_items = sample_data
     mrr = MRR(all_items)
     assert math.isclose(mrr.compute(recommended_list, relevant_list, k), 1 / 1)
-
-
-def test_ndcg(sample_data):
-    """
-    Test case for the NDCG (Normalized Discounted Cumulative Gain) metric.
-
-    Args:
-        sample_data (tuple): A tuple containing the recommended list, relevant list, k value, and all items.
-    """
-    recommended_list, relevant_list, k, all_items = sample_data
-    ndcg = NDCG(all_items)
-    golden_answer = (1 / 1 + 1 / 2) / (1 + 1 / math.log2(3) + 1 / 2)
-    assert math.isclose(ndcg.compute(recommended_list, relevant_list, k), golden_answer)

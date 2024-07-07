@@ -59,7 +59,7 @@ class Serendipity(BaseMetric):
                 serendipity += max((score - primitive_score), 0)
                 self._itemwise_metrics[item] = max((score - primitive_score), 0)
             else:
-                self._itemwise_metrics[item] = 0 
+                self._itemwise_metrics[item] = 0
         return serendipity / k
 
     def __compute_popularity_based_prob(self, item: int, list_len: int) -> float:

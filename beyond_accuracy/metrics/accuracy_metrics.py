@@ -9,7 +9,7 @@ from .base_metrics import BaseMetric
 
 from typing import List
 
-import math
+import numpy as np
 
 
 class Precision(BaseMetric):
@@ -132,18 +132,26 @@ class NDCG(BaseMetric):
         Returns:
             float: The computed NDCG.
         """
-        if not interaction_historys:
-            return 0.0
 
-        dcg = 0.0
+        def ndcg_at_k(recommended_items, ground_truth_items, k):
 
-        for i, item in enumerate(recommendations[:k], 1):
-            if item in interaction_historys:
-                dcg += 1 / math.log2(i + 1)
+            def dcg_at_k(r, k):
+                r = np.asfarray(r)[:k]
+                if r.size:
+                    return np.sum(r / np.log2(np.arange(2, r.size + 2)))
+                return 0.0
 
-        idcg = sum(
-            1 / math.log2(i + 1)
-            for i in range(1, min(len(interaction_historys), k) + 1)
-        )
+            def idcg_at_k(r, k):
+                r = np.sort(np.asfarray(r))[::-1][:k]
+                return dcg_at_k(r, k)
 
-        return dcg / idcg if idcg != 0 else 0.0
+            relevance_scores = np.array(
+                [1 if item in ground_truth_items else 0 for item in recommended_items]
+            )
+            dcg = dcg_at_k(relevance_scores, k)
+            idcg = idcg_at_k(relevance_scores, k)
+            ndcg = dcg / idcg if idcg > 0 else 0.0
+
+            return ndcg
+
+        return ndcg_at_k(recommendations, interaction_historys, k)
