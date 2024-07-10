@@ -62,6 +62,8 @@ class Serendipity(BaseMetric):
                             )
                             for interaction_item in interaction_historys
                         )
+                        if np.isnan(relevance):
+                            relevance = 0
                     except Exception as e:
                         relevance = 0
                     score = (k - i - 1) / (k - 1)
@@ -69,8 +71,6 @@ class Serendipity(BaseMetric):
                     delta = max((score - primitive_score) * relevance, 0)
                     serendipity += delta
                     self._itemwise_metrics[item] = delta
-            if np.isnan(self._itemwise_metrics[item]):
-                self._itemwise_metrics[item] = 0
 
         return serendipity / k
 
