@@ -1,7 +1,6 @@
 import pytest
-import math
 
-from beyond_accuracy.metrics.beyond_metrics import Serendipity, OrderAwareSerendipity
+from beyond_accuracy.metrics.beyond_metrics import Serendipity
 import random
 
 
@@ -31,14 +30,4 @@ def test_serendipity(sample_data):
         recommendations, interaction_history, k
     )
     print(serendipity_metric.get_itemwise_metrics())
-    print(serendipity_value)
-
-
-def test_serendipity_r(sample_data):
-    all_items, all_interactions, recommendations, interaction_history, k = sample_data
-    serendipity_metric = OrderAwareSerendipity(all_items)
-    serendipity_metric.fit(all_interactions)
-    serendipity_value = serendipity_metric.compute(
-        recommendations, interaction_history, k
-    )
     print(serendipity_value)
