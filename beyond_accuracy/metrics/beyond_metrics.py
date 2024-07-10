@@ -69,6 +69,8 @@ class Serendipity(BaseMetric):
                     delta = max((score - primitive_score) * relevance, 0)
                     serendipity += delta
                     self._itemwise_metrics[item] = delta
+            if np.isnan(self._itemwise_metrics[item]):
+                self._itemwise_metrics[item] = 0
 
         return serendipity / k
 
