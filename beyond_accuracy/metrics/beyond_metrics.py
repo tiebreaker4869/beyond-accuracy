@@ -1,8 +1,9 @@
 from typing import List, Dict, Tuple
 import heapq
 import numpy as np
+from .base_metrics import BaseMetric
 
-class Serendipity:
+class Serendipity(BaseMetric):
     """
     Serendipity metric.
     """
