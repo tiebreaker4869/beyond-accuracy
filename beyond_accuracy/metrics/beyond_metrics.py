@@ -10,6 +10,8 @@ from typing import List, Dict
 
 import heapq
 
+import pandas as pd
+
 
 class Serendipity(BaseMetric):
     """
@@ -20,6 +22,9 @@ class Serendipity(BaseMetric):
         super().__init__(all_items)
         self._popularity: Dict[int, int] = {}
         self._itemwise_metrics: Dict[int, float] = None
+
+    def fit_item_user_matrix(self, interaction_historys: pd.DataFrame) -> None:
+        pass
 
     def fit(self, all_interactions: List[str | int]) -> None:
         _, transformed_interactions = self._input_mapping([], all_interactions)
