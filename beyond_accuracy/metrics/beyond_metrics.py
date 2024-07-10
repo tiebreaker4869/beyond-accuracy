@@ -43,11 +43,14 @@ class Serendipity(BaseMetric):
                 if self._item_user_matrix is None:
                     self._itemwise_metrics[item] = 0
                 else:
-                    relevance = max(
-                        np.dot(self._item_user_matrix[item], self._item_user_matrix[interaction_item]) /
-                        (np.linalg.norm(self._item_user_matrix[item]) * np.linalg.norm(self._item_user_matrix[interaction_item]))
-                        for interaction_item in interaction_historys
-                    )
+                    try:
+                        relevance = max(
+                            np.dot(self._item_user_matrix[item], self._item_user_matrix[interaction_item]) /
+                            (np.linalg.norm(self._item_user_matrix[item]) * np.linalg.norm(self._item_user_matrix[interaction_item]))
+                            for interaction_item in interaction_historys
+                        )
+                    except Exception as e:
+                        relevance = 0
                     score = (k - i - 1) / (k - 1)
                     primitive_score = self.__compute_popularity_based_prob(item, k)
                     delta = max((score - primitive_score) * relevance, 0)
