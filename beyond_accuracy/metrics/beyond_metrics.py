@@ -5,6 +5,7 @@ This module contains functions to compute metrics beyond accuracy such as serend
 import torch
 from sklearn.cluster import KMeans
 import numpy as np
+from collections import defaultdict
 
 def cluster_based_serendipity(histories: list[list[int]], recommendations: list[list[int]], item_embedding: torch.Tensor, k: int) -> float:
     """
@@ -58,3 +59,67 @@ def cluster_based_serendipity(histories: list[list[int]], recommendations: list[
     diversity_score = sum(res) / len(res)
     
     return diversity_score
+
+class Serendipity:
+
+    def __init__(self, histories: list[list[int]], recommendations: list[list[int]], target_items: list[list[int]], k: int):
+        self.recommendations = recommendations
+        self.target_items = target_items
+        self.k = k
+        self.histories = histories
+        self.popularity = None
+        self.k_most_popular: list = None
+        self._fit()
+    
+    def _fit(self):
+        # calculate the popularity of each item in histories
+        self.popularity = defaultdict(int)
+        for hist in self.histories:
+            for item in hist:
+                self.popularity[item] += 1
+        self.k_most_popular = sorted(self.popularity, key=self.popularity.get, reverse=True)[:self.k]
+    
+    def unexpectedness_based_serendipity(self) -> float:
+        """
+        Measure the serendipity of the recommendations as the product of unexpectedness and relevance.
+        Args:
+            - None
+        Returns:
+            - float, the serendipity score
+        """
+        serendipity = 0
+        for recommendation in self.recommendations:
+            current_serendipity = 0
+            for item in recommendation[:self.k]:
+                if item in self.target_items:
+                    rank = recommendation.index(item) + 1
+                    p_iu = (self.k - rank) / (self.k - 1)
+                    rank_pop = self.k_most_popular.index(item) + 1 if item in self.k_most_popular else self.k
+                    p_pop = (self.k - rank_pop) / (self.k - 1)
+                    current_serendipity += max(p_iu - p_pop, 0)
+            serendipity += current_serendipity / self.k
+        return serendipity / len(self.recommendations)
+    
+    def unexpected_based_orderaware_serendipity(self) -> float:
+        """
+        Measure the serendipity of the recommendations as the product of unexpectedness and relevance.
+        Also consider the order of the recommendations.
+        Args:
+            - None
+        Returns:
+            - float, the serendipity score
+        """
+        serendipity = 0
+        for recommendation in self.recommendations:
+            current_serendipity = 0
+            relevant_count = 0
+            for idx, item in enumerate(recommendation[:self.k], start = 1):
+                if item in self.target_items:
+                    relevant_count += 1
+                    rank = recommendation.index(item) + 1
+                    p_iu = (self.k - rank) / (self.k - 1)
+                    rank_pop = self.k_most_popular.index(item) + 1 if item in self.k_most_popular else self.k
+                    p_pop = (self.k - rank_pop) / (self.k - 1)
+                    current_serendipity += max(p_iu - p_pop, 0) * relevant_count / idx
+            serendipity += current_serendipity / self.k
+        return serendipity / len(self.recommendations)
