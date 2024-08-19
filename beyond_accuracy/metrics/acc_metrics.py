@@ -44,7 +44,6 @@ def ndcg(recommendations: list[list[int]], target_items: list[list[int]], k: int
                 dcg += 1 / math.log2(i + 1)
         idcg = sum(1 / math.log2(i + 1) for i in range(1, min(k + 1, len(target_item) + 1)))
         ndcg_sum += dcg / idcg
-        print(dcg, idcg)
     return ndcg_sum / len(recommendations)
 
 def precision(recommendations: list[list[int]], target_items: list[list[int]], k: int) -> float:
