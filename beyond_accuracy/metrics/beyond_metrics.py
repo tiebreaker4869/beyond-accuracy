@@ -18,9 +18,7 @@ def cluster_based_serendipity(histories: list[list[int]], recommendations: list[
     Returns:
         - float, the serendipity score
     """
-    histories_np = np.array(histories)
     recommendations_np = np.array(recommendations)
-    
     # cluster movie embeddings
     clustering = KMeans(n_clusters=int(len(item_embedding)**0.5)).fit(item_embedding)
     labels = clustering.labels_
@@ -38,8 +36,8 @@ def cluster_based_serendipity(histories: list[list[int]], recommendations: list[
     top_k = recommendations_np[:, :k]
     res = []
 
-    for u in range(len(histories_np)):
-        relevant_centroid_clusters = np.unique(centroids_labels[labels[histories_np[u]]])
+    for u in range(len(histories)):
+        relevant_centroid_clusters = np.unique(centroids_labels[labels[histories[u]]])
         n_relevant_cluster = sum(unique_cl_counts[relevant_centroid_clusters])
         
         top_k_labels = labels[top_k[u]]

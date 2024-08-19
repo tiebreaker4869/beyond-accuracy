@@ -4,7 +4,7 @@ import torch
 
 def test_cluster_based_serendipity():
     # 示例输入数据
-    histories = [[1, 2], [3, 4], [5, 6]]
+    histories = [[1, 2, 6], [3, 4], [5, 6]]
     recommendations = [[1, 3, 5], [2, 4, 6], [1, 2, 3]]
     item_embedding = torch.tensor([
         [0.1, 0.2],
