@@ -86,10 +86,10 @@ class Serendipity:
             - float, the serendipity score
         """
         serendipity = 0
-        for recommendation in self.recommendations:
+        for recommendation, target in zip(self.recommendations, self.target_items):
             current_serendipity = 0
             for item in recommendation[:self.k]:
-                if item in self.target_items:
+                if item in target:
                     rank = recommendation.index(item) + 1
                     p_iu = (self.k - rank) / (self.k - 1)
                     rank_pop = self.k_most_popular.index(item) + 1 if item in self.k_most_popular else self.k
@@ -108,11 +108,11 @@ class Serendipity:
             - float, the serendipity score
         """
         serendipity = 0
-        for recommendation in self.recommendations:
+        for recommendation, target in zip(self.recommendations, self.target_items):
             current_serendipity = 0
             relevant_count = 0
             for idx, item in enumerate(recommendation[:self.k], start = 1):
-                if item in self.target_items:
+                if item in target:
                     relevant_count += 1
                     rank = recommendation.index(item) + 1
                     p_iu = (self.k - rank) / (self.k - 1)
