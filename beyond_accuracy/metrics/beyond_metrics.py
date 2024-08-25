@@ -121,3 +121,25 @@ class Serendipity:
                     current_serendipity += max(p_iu - p_pop, 0) * relevant_count / idx
             serendipity += current_serendipity / self.k
         return serendipity / len(self.recommendations)
+    
+    def unexpected_based_count_serendipity(self) -> float:
+        """
+        Measure the serendipity of the recommendations as the percentage of unexpected but relevant items in the recommendations.
+        Args:
+            - None
+        Returns:
+            - float, the serendipity score
+        """
+        serendipity = 0
+        
+        # get top 100 popular items
+        pop_list = sorted(self.popularity, key=self.popularity.get, reverse=True)[:100]
+        
+        for recommendation, target in zip(self.recommendations, self.target_items):
+            count = 0
+            for item in recommendation[:self.k]:
+                if item in target and item not in pop_list:
+                    count += 1
+            serendipity += count / self.k
+        
+        return serendipity / len(self.recommendations)
